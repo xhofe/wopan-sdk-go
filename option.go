@@ -20,6 +20,18 @@ func WithRefreshToken(token string) Option {
 	}
 }
 
+func WithUA(ua string) Option {
+	return func(w *WoClient) {
+		w.SetUA(ua)
+	}
+}
+
+func WithJsonUnmarshalerFunc(f func(data []byte, v interface{}) error) Option {
+	return func(w *WoClient) {
+		w.SetJsonUnmarshalerFunc(f)
+	}
+}
+
 func WithClient(hc *http.Client) Option {
 	return func(c *WoClient) {
 		c.SetHttpClient(hc)

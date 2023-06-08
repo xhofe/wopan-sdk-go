@@ -49,12 +49,12 @@ type ReqWithT[T any] Req[BodyWithT[T]]
 type ReqWithKey Req[BodyWithKey]
 
 type Resp struct {
-	STATUS string `json:"STATUS"`
-	MSG    string `json:"MSG"`
-	LOGID  string `json:"LOGID"`
-	RSP    struct {
-		RSPCODE string      `json:"RSP_CODE"`
-		RSPDESC string      `json:"RSP_DESC"`
-		DATA    interface{} `json:"DATA"`
+	Status string `json:"STATUS"`
+	Msg    string `json:"MSG"`
+	LogID  string `json:"LOGID"`
+	Rsp    struct {
+		RspCode string      `json:"RSP_CODE"`
+		RspDesc string      `json:"RSP_DESC"`
+		Data    interface{} `json:"DATA"`
 	} `json:"RSP"`
 }

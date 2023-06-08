@@ -1,16 +1,19 @@
 package wopan
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/go-resty/resty/v2"
 )
 
 type WoClient struct {
-	client       *resty.Client
-	crypto       *Crypto
-	accessToken  string
-	refreshToken string
+	client            *resty.Client
+	crypto            *Crypto
+	accessToken       string
+	refreshToken      string
+	ua                string
+	jsonUnmarshalFunc func(data []byte, v interface{}) error
 }
 
 func New(opts ...Option) *WoClient {
@@ -25,7 +28,15 @@ func New(opts ...Option) *WoClient {
 }
 
 func Default(refreshToken string) *WoClient {
-	return New(WithRefreshToken(refreshToken))
+	return New(WithRefreshToken(refreshToken), WithUA(DefaultUA), WithJsonUnmarshalerFunc(json.Unmarshal))
+}
+
+func (w *WoClient) SetUA(ua string) {
+	w.ua = ua
+}
+
+func (w *WoClient) SetJsonUnmarshalerFunc(f func(data []byte, v interface{}) error) {
+	w.jsonUnmarshalFunc = f
 }
 
 func (w *WoClient) SetAccessToken(token string) {

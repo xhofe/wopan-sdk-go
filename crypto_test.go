@@ -9,11 +9,11 @@ import (
 func TestCrypto_Decrypt(t *testing.T) {
 	c := wopan.NewCrypto()
 	c.SetAccessToken("c3f0362b-0515-4997-a9c2-0478702a5fea")
-	res, err := c.Decrypt("b+fh7Uuv5WqECmt1B++feofiJE8QlaGAN0GEFe9UYlLgLetBsq0Vq3bfPJQlT89h/Nzfye/UwN/gOSEMS/GYUw0NVilHlz+gFRW5x0rtpsdqjcIF7B6qQnE8mYy2oLrwxku5XHZ3lwBsMdMg6yrwhviXg4I1cqKEAKE94xxMDUaOHAGxSwHmleOLJA9TDt7h5PRA6USeRQrdy/HIambvwY56UK8nwgdocAC/H19DR0hlPko7DAfTpSDps9rEBDebvlk+G88WF5f7S/LgOOwsULeSEf9WGqj+kO+shOkhj5T5IR+AQ/rQqCT8WadKgbig")
+	res, err := c.WoHomeDecrypt("b+fh7Uuv5WqECmt1B++feofiJE8QlaGAN0GEFe9UYlLgLetBsq0Vq3bfPJQlT89h/Nzfye/UwN/gOSEMS/GYUw0NVilHlz+gFRW5x0rtpsdqjcIF7B6qQnE8mYy2oLrwxku5XHZ3lwBsMdMg6yrwhviXg4I1cqKEAKE94xxMDUaOHAGxSwHmleOLJA9TDt7h5PRA6USeRQrdy/HIambvwY56UK8nwgdocAC/H19DR0hlPko7DAfTpSDps9rEBDebvlk+G88WF5f7S/LgOOwsULeSEf9WGqj+kO+shOkhj5T5IR+AQ/rQqCT8WadKgbig")
 	if err != nil {
-		t.Errorf("Decrypt() error = %v", err)
+		t.Errorf("WoHomeDecrypt() error = %v", err)
 	} else {
-		t.Logf("Decrypt() res = %v", res)
+		t.Logf("WoHomeDecrypt() res = %v", res)
 	}
 }
 
