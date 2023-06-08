@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func calHeader(key, channel string) Header {
+func calHeader(channel, key string) Header {
 	resTime := time.Now().UnixMilli()
 	reqSeq := rand.Int31n(8999) + 1e5
 	version := ""

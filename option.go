@@ -26,9 +26,15 @@ func WithUA(ua string) Option {
 	}
 }
 
-func WithJsonUnmarshalerFunc(f func(data []byte, v interface{}) error) Option {
+func WithJsonMarshalFunc(f func(v interface{}) ([]byte, error)) Option {
 	return func(w *WoClient) {
-		w.SetJsonUnmarshalerFunc(f)
+		w.SetJsonMarshalFunc(f)
+	}
+}
+
+func WithJsonUnmarshalFunc(f func(data []byte, v interface{}) error) Option {
+	return func(w *WoClient) {
+		w.SetJsonUnmarshalFunc(f)
 	}
 }
 

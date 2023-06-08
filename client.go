@@ -13,6 +13,7 @@ type WoClient struct {
 	accessToken       string
 	refreshToken      string
 	ua                string
+	jsonMarshalFunc   func(v interface{}) ([]byte, error)
 	jsonUnmarshalFunc func(data []byte, v interface{}) error
 }
 
@@ -27,15 +28,36 @@ func New(opts ...Option) *WoClient {
 	return w
 }
 
-func Default(refreshToken string) *WoClient {
-	return New(WithRefreshToken(refreshToken), WithUA(DefaultUA), WithJsonUnmarshalerFunc(json.Unmarshal))
+func DefaultWithAccessToken(accessToken string) *WoClient {
+	w := Default()
+	w.SetAccessToken(accessToken)
+	return w
+}
+
+// DefaultWithRefreshToken it doesn't work now, because we don't know refresh token method now.
+func DefaultWithRefreshToken(refreshToken string) *WoClient {
+	w := Default()
+	w.SetRefreshToken(refreshToken)
+	return w
+}
+
+func Default() *WoClient {
+	return New(
+		WithUA(DefaultUA),
+		WithJsonMarshalFunc(json.Marshal),
+		WithJsonUnmarshalFunc(json.Unmarshal),
+	)
 }
 
 func (w *WoClient) SetUA(ua string) {
 	w.ua = ua
 }
 
-func (w *WoClient) SetJsonUnmarshalerFunc(f func(data []byte, v interface{}) error) {
+func (w *WoClient) SetJsonMarshalFunc(f func(v interface{}) ([]byte, error)) {
+	w.jsonMarshalFunc = f
+}
+
+func (w *WoClient) SetJsonUnmarshalFunc(f func(data []byte, v interface{}) error) {
 	w.jsonUnmarshalFunc = f
 }
 

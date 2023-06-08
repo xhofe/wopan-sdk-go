@@ -10,7 +10,7 @@ type ReqOpt struct {
 	Ctx           context.Context
 }
 
-func (w *WoClient) Request(channel string, key string, body interface{}, resp interface{}, opt ReqOpt) ([]byte, error) {
+func (w *WoClient) Request(channel string, key string, param, other Json, resp interface{}, opt ReqOpt) ([]byte, error) {
 	req := w.NewRequest()
 	req.SetHeaders(map[string]string{
 		"Origin":  "https://pan.wo.cn",
@@ -22,12 +22,16 @@ func (w *WoClient) Request(channel string, key string, body interface{}, resp in
 	if opt.Ctx != nil {
 		req.SetContext(opt.Ctx)
 	}
-	header := calHeader(key, channel)
+	header := calHeader(channel, key)
+	body, err := w.NewBody(channel, param, other)
+	if err != nil {
+		return nil, err
+	}
 	var _resp Resp
-	req.SetBody(Json{
-		"header": header,
-		"body":   body,
-	}).SetResult(&resp)
+	req.SetBody(Req[interface{}]{
+		Header: header,
+		Body:   body,
+	}).SetResult(&_resp)
 	res, err := req.Post(fmt.Sprintf("https://panservice.mail.wo.cn/%s/dispatcher", channel))
 	if err != nil {
 		return nil, err
@@ -58,10 +62,10 @@ func (w *WoClient) Request(channel string, key string, body interface{}, resp in
 	return res.Body(), nil
 }
 
-func (w *WoClient) RequestApiUser(key string, body interface{}, resp interface{}, opt ReqOpt) ([]byte, error) {
-	return w.Request(APIUserChannel, key, body, resp, opt)
+func (w *WoClient) RequestApiUser(key string, param, other Json, resp interface{}, opt ReqOpt) ([]byte, error) {
+	return w.Request(APIUserChannel, key, param, other, resp, opt)
 }
 
-func (w *WoClient) RequestWoHome(key string, body interface{}, resp interface{}, opt ReqOpt) ([]byte, error) {
-	return w.Request(WoHomeChannel, key, body, resp, opt)
+func (w *WoClient) RequestWoHome(key string, param, other Json, resp interface{}, opt ReqOpt) ([]byte, error) {
+	return w.Request(WoHomeChannel, key, param, other, resp, opt)
 }

@@ -32,3 +32,14 @@ func CopyStruct(src, dst interface{}) {
 		dstField.Set(srcField)
 	}
 }
+
+// MergeJson merge json
+func MergeJson(jsons ...Json) Json {
+	newJson := Json{}
+	for _, m := range jsons {
+		for k, v := range m {
+			newJson[k] = v
+		}
+	}
+	return newJson
+}

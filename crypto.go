@@ -20,16 +20,20 @@ func (c *Crypto) SetAccessToken(token string) {
 	c.accessKey = []byte(token[:16])
 }
 
-func (c *Crypto) Encrypt(content string, channel string) (string, error) {
+func (c *Crypto) EncryptBytes(bs []byte, channel string) (string, error) {
 	key := c.accessKey
 	if channel == "api-user" {
 		key = c.key
 	}
-	res, err := AesEncrypt([]byte(content), key, c.iv)
+	res, err := AesEncrypt(bs, key, c.iv)
 	if err != nil {
 		return "", err
 	}
 	return base64.StdEncoding.EncodeToString(res), nil
+}
+
+func (c *Crypto) Encrypt(content string, channel string) (string, error) {
+	return c.EncryptBytes([]byte(content), channel)
 }
 
 func (c *Crypto) Decrypt(content string, channel string) (string, error) {

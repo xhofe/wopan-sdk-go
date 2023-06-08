@@ -16,38 +16,6 @@ type Req[T any] struct {
 	Body   T `json:"body"`
 }
 
-type BodyWithParam struct {
-	Param    string `json:"param"`
-	ClientId string `json:"clientId"`
-	Secret   bool   `json:"secret"`
-}
-
-type BodyWithKey struct {
-	Param string `json:"param"`
-	Key   bool   `json:"key"`
-}
-
-type BodyWithT[T any] struct {
-	Param    T      `json:"param"`
-	ClientId string `json:"clientId"`
-}
-
-type BodyWithParamNoClientId struct {
-	Param  string `json:"param"`
-	Secret bool   `json:"secret"`
-}
-
-type BodyWithQry struct {
-	QryType  int    `json:"qryType"`
-	ClientId string `json:"clientId"`
-}
-
-type ReqWithParam Req[BodyWithParam]
-type ReqWithQry Req[BodyWithQry]
-type ReqWithParamNoClientId Req[BodyWithParamNoClientId]
-type ReqWithT[T any] Req[BodyWithT[T]]
-type ReqWithKey Req[BodyWithKey]
-
 type Resp struct {
 	Status string `json:"STATUS"`
 	Msg    string `json:"MSG"`
