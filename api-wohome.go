@@ -1,7 +1,6 @@
 package wopan
 
-// FCloudProductOrdListQryData no encrypt
-type FCloudProductOrdListQryData struct {
+type FCloudProductOrdListQryCtxData struct {
 	FcloudProductOrds []struct {
 		ActiviteCode        string `json:"activiteCode"`
 		AppStorePackageDesc string `json:"appStorePackageDesc"`
@@ -52,9 +51,16 @@ type FCloudProductOrdListQryData struct {
 	IsShowInlet string `json:"isShowInlet"`
 }
 
-type QueryCloudUsageInfoParam struct {
-	PhoneNum string `json:"phoneNum"`
-	ClientId string `json:"clientId"`
+func (w *WoClient) FCloudProductOrdListQryCtx(opts ...RestyOption) (*FCloudProductOrdListQryCtxData, error) {
+	var resp FCloudProductOrdListQryCtxData
+	_, err := w.RequestWoHome("FCloudProductOrdListQryCtx", nil, Json{
+		"qryType":  "1",
+		"clientId": ClientID,
+	}, &resp, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
 }
 
 type QueryCloudUsageInfoData struct {
@@ -79,53 +85,69 @@ type QueryCloudUsageInfoData struct {
 	Status     string `json:"status"`
 }
 
-type FCloudProductPackageParam struct {
-	ClientId string `json:"clientId"`
-	VipLevel string `json:"vipLevel"`
+func (w *WoClient) QueryCloudUsageInfo(opts ...RestyOption) (*QueryCloudUsageInfoData, error) {
+	if w.phone == "" {
+		_, err := w.AppQueryUser(opts...)
+		if err != nil {
+			return nil, err
+		}
+	}
+	var resp QueryCloudUsageInfoData
+	_, err := w.RequestWoHome("QueryCloudUsageInfo", Json{
+		"phoneNum": w.phone,
+		"clientId": ClientID,
+	}, Json{
+		"secret": true,
+	}, &resp, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
 }
 
-type FCloudProductPackageData []struct {
-	VipLevel         string `json:"vipLevel"`
-	VipDesc          string `json:"vipDesc"`
-	FamilyCount      string `json:"familyCount"`
-	RecycleBin       string `json:"recycleBin"`
-	BatchUploadCount string `json:"batchUploadCount"`
-	Capacity         string `json:"capacity"`
-	UploadFileSize   string `json:"uploadFileSize"`
-	MemberCount      string `json:"memberCount"`
-	TransientCount   string `json:"transientCount"`
-	VipWeight        string `json:"vipWeight"`
-	Packages         []struct {
-		AppStoreContractProductId string `json:"appStoreContractProductId"`
-		AppStoreDesc              string `json:"appStoreDesc"`
-		AppStorePrice             string `json:"appStorePrice"`
-		AppStoreProductId         string `json:"appStoreProductId"`
-		ApplyTime                 string `json:"applyTime"`
-		BatchUploadCount          string `json:"batchUploadCount"`
-		Capacity                  string `json:"capacity"`
-		Days                      string `json:"days"`
-		Desc                      string `json:"desc"`
-		DescPic                   string `json:"descPic"`
-		ExpireTime                string `json:"expireTime"`
-		FamilyCount               string `json:"familyCount"`
-		Label                     string `json:"label"`
-		MemberCount               string `json:"memberCount"`
-		Months                    string `json:"months"`
-		Order                     int    `json:"order"`
-		OriginalPrice             string `json:"originalPrice"`
-		PayType                   string `json:"payType"`
-		Price                     string `json:"price"`
-		ProductCode               string `json:"productCode"`
-		ProductId                 string `json:"productId"`
-		RecycleBin                string `json:"recycleBin"`
-		Tips                      string `json:"tips"`
-		TransientCount            string `json:"transientCount"`
-		UploadFileSize            string `json:"uploadFileSize"`
-		VipDesc                   string `json:"vipDesc"`
-		VipLevel                  string `json:"vipLevel"`
-		VipWeight                 string `json:"vipWeight"`
-	} `json:"packages"`
+// FCloudProductPackageData is not required
+
+type GetZoneInfoData struct {
+	Url string `json:"url"`
 }
 
-type ClassifyRuleParam struct {
+func (w *WoClient) GetZoneInfo(opts ...RestyOption) (*GetZoneInfoData, error) {
+	var resp GetZoneInfoData
+	_, err := w.RequestWoHome("GetZoneInfo", Json{
+		"appId": AppID,
+	}, Json{
+		"key": true,
+	}, &resp, opts...)
+	if err != nil {
+		return nil, err
+	}
+	if w.zoneURL == "" {
+		w.zoneURL = resp.Url
+	}
+	return &resp, nil
+}
+
+type FamilyUserCurrentEncodeData struct {
+	Count           string `json:"count"`
+	DefaultHomeId   int    `json:"defaultHomeId"`
+	DefaultHomeName string `json:"defaultHomeName"`
+	GroupHeadUrl    string `json:"groupHeadUrl"`
+	GroupName       string `json:"groupName"`
+	Id              int    `json:"id"`
+	MemberRole      string `json:"memberRole"`
+	OwnerId         string `json:"owner  Id"`
+	UnreadFlag      string `json:"unreadFlag"`
+}
+
+func (w *WoClient) FamilyUserCurrentEncode(opts ...RestyOption) (*FamilyUserCurrentEncodeData, error) {
+	var resp FamilyUserCurrentEncodeData
+	_, err := w.RequestWoHome("FamilyUserCurrentEncode", Json{
+		"clientId": ClientID,
+	}, Json{
+		"secret": true,
+	}, &resp, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
 }

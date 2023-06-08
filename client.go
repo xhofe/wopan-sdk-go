@@ -15,6 +15,9 @@ type WoClient struct {
 	ua                string
 	jsonMarshalFunc   func(v interface{}) ([]byte, error)
 	jsonUnmarshalFunc func(data []byte, v interface{}) error
+
+	phone   string
+	zoneURL string
 }
 
 func New(opts ...Option) *WoClient {

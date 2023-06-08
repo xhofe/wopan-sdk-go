@@ -67,3 +67,5 @@ func WithProxy(proxy string) Option {
 		c.SetProxy(proxy)
 	}
 }
+
+type RestyOption func(request *resty.Request)

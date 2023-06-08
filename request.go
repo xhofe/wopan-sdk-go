@@ -1,26 +1,18 @@
 package wopan
 
 import (
-	"context"
 	"fmt"
 )
 
-type ReqOpt struct {
-	NoAccessToken bool
-	Ctx           context.Context
-}
-
-func (w *WoClient) Request(channel string, key string, param, other Json, resp interface{}, opt ReqOpt) ([]byte, error) {
+func (w *WoClient) Request(channel string, key string, param, other Json, resp interface{}, opts ...RestyOption) ([]byte, error) {
 	req := w.NewRequest()
 	req.SetHeaders(map[string]string{
 		"Origin":  "https://pan.wo.cn",
 		"Referer": "https://pan.wo.cn/",
 	})
-	if !opt.NoAccessToken {
+	if w.accessToken != "" {
 		req.SetHeader("Accesstoken", w.accessToken)
-	}
-	if opt.Ctx != nil {
-		req.SetContext(opt.Ctx)
+
 	}
 	header := calHeader(channel, key)
 	body, err := w.NewBody(channel, param, other)
@@ -32,7 +24,10 @@ func (w *WoClient) Request(channel string, key string, param, other Json, resp i
 		Header: header,
 		Body:   body,
 	}).SetResult(&_resp)
-	res, err := req.Post(fmt.Sprintf("https://panservice.mail.wo.cn/%s/dispatcher", channel))
+	for _, opt := range opts {
+		opt(req)
+	}
+	res, err := req.Post(fmt.Sprintf("%s%s/dispatcher", BaseURL, channel))
 	if err != nil {
 		return nil, err
 	}
@@ -62,10 +57,10 @@ func (w *WoClient) Request(channel string, key string, param, other Json, resp i
 	return res.Body(), nil
 }
 
-func (w *WoClient) RequestApiUser(key string, param, other Json, resp interface{}, opt ReqOpt) ([]byte, error) {
-	return w.Request(APIUserChannel, key, param, other, resp, opt)
+func (w *WoClient) RequestApiUser(key string, param, other Json, resp interface{}, opts ...RestyOption) ([]byte, error) {
+	return w.Request(APIUserChannel, key, param, other, resp, opts...)
 }
 
-func (w *WoClient) RequestWoHome(key string, param, other Json, resp interface{}, opt ReqOpt) ([]byte, error) {
-	return w.Request(WoHomeChannel, key, param, other, resp, opt)
+func (w *WoClient) RequestWoHome(key string, param, other Json, resp interface{}, opts ...RestyOption) ([]byte, error) {
+	return w.Request(WoHomeChannel, key, param, other, resp, opts...)
 }
