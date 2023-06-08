@@ -15,19 +15,38 @@ const (
 
 // api-user methods
 const (
-	PcWebLogin        = "PcWebLogin"        // ReqWithParam
-	PcLoginVerifyCode = "PcLoginVerifyCode" // ReqWithParam
-	AppQueryUser      = "AppQueryUser"      // ReqWithParam
+	KeyPcWebLogin        = "PcWebLogin"        // ReqWithParam
+	KeyPcLoginVerifyCode = "PcLoginVerifyCode" // ReqWithParam
+	KeyAppQueryUser      = "AppQueryUser"      // ReqWithParam
 )
 
 // wohome methods
 const (
-	FCloudProductOrdListQry = "FCloudProductOrdListQry" // ReqWithQry
-	QueryCloudUsageInfo     = "QueryCloudUsageInfo"     // ReqWithParamNoClientId
-	FCloudProductPackage    = "FCloudProductPackage"    // ReqWithT
-	ClassifyRule            = "ClassifyRule"            // ReqWithKey
-	GetZoneInfo             = "GetZoneInfo"
-	QuerySysConfig          = "QuerySysConfig"
-	FamilyUserCurrentEncode = "FamilyUserCurrentEncode"
-	QueryAllFiles           = "QueryAllFiles"
+	KeyFCloudProductOrdListQry = "FCloudProductOrdListQry" // ReqWithQry
+	KeyQueryCloudUsageInfo     = "QueryCloudUsageInfo"     // ReqWithParamNoClientId
+	KeyFCloudProductPackage    = "FCloudProductPackage"    // ReqWithT
+	KeyClassifyRule            = "ClassifyRule"            // ReqWithKey
+	KeyGetZoneInfo             = "GetZoneInfo"
+	KeyQuerySysConfig          = "QuerySysConfig"
+	KeyFamilyUserCurrentEncode = "FamilyUserCurrentEncode"
+	KeyQueryAllFiles           = "QueryAllFiles"
+	KeyGetSearchDirectory      = "GetSearchDirectory"
+	KeyGetDownloadUrlV2        = "GetDownloadUrlV2"
+	KeyGetDownloadUrl          = "GetDownloadUrl"
+	KeyCreateDirectory         = "CreateDirectory"
+	KeyRenameFileOrDirectory   = "RenameFileOrDirectory"
+	KeyMoveFile                = "MoveFile"
+	KeyCopyFile                = "CopyFile"
+	KeyDeleteFile              = "DeleteFile"
+	KeyEmptyRecycleData        = "EmptyRecycleData"
+	KeyUpload2C                = "Upload2C"
+)
+
+const (
+	SortNameAsc = iota + 1
+	SortNameDesc
+	SortSizeAsc
+	SortSizeDesc
+	SortTimeAsc
+	SortTimeDesc
 )

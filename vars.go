@@ -5,4 +5,7 @@ var (
 		"clientId": ClientID,
 		"secret":   true,
 	}
+	JsonSecret = Json{
+		"secret": true,
+	}
 )

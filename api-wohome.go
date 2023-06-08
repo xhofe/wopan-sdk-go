@@ -51,9 +51,9 @@ type FCloudProductOrdListQryCtxData struct {
 	IsShowInlet string `json:"isShowInlet"`
 }
 
-func (w *WoClient) FCloudProductOrdListQryCtx(opts ...RestyOption) (*FCloudProductOrdListQryCtxData, error) {
+func (w *WoClient) FCloudProductOrdListQry(opts ...RestyOption) (*FCloudProductOrdListQryCtxData, error) {
 	var resp FCloudProductOrdListQryCtxData
-	_, err := w.RequestWoHome("FCloudProductOrdListQryCtx", nil, Json{
+	_, err := w.RequestWoHome(KeyFCloudProductOrdListQry, nil, Json{
 		"qryType":  "1",
 		"clientId": ClientID,
 	}, &resp, opts...)
@@ -93,7 +93,7 @@ func (w *WoClient) QueryCloudUsageInfo(opts ...RestyOption) (*QueryCloudUsageInf
 		}
 	}
 	var resp QueryCloudUsageInfoData
-	_, err := w.RequestWoHome("QueryCloudUsageInfo", Json{
+	_, err := w.RequestWoHome(KeyQueryCloudUsageInfo, Json{
 		"phoneNum": w.phone,
 		"clientId": ClientID,
 	}, Json{
@@ -113,7 +113,7 @@ type GetZoneInfoData struct {
 
 func (w *WoClient) GetZoneInfo(opts ...RestyOption) (*GetZoneInfoData, error) {
 	var resp GetZoneInfoData
-	_, err := w.RequestWoHome("GetZoneInfo", Json{
+	_, err := w.RequestWoHome(KeyGetZoneInfo, Json{
 		"appId": AppID,
 	}, Json{
 		"key": true,
@@ -141,7 +141,7 @@ type FamilyUserCurrentEncodeData struct {
 
 func (w *WoClient) FamilyUserCurrentEncode(opts ...RestyOption) (*FamilyUserCurrentEncodeData, error) {
 	var resp FamilyUserCurrentEncodeData
-	_, err := w.RequestWoHome("FamilyUserCurrentEncode", Json{
+	_, err := w.RequestWoHome(KeyFamilyUserCurrentEncode, Json{
 		"clientId": ClientID,
 	}, Json{
 		"secret": true,

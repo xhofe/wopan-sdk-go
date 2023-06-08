@@ -7,7 +7,7 @@ type PcWebLoginData struct {
 
 func (w *WoClient) PcWebLogin(phone, password string, opts ...RestyOption) (*PcWebLoginData, error) {
 	var resp PcWebLoginData
-	_, err := w.RequestApiUser("PcWebLogin", Json{
+	_, err := w.RequestApiUser(KeyPcWebLogin, Json{
 		"phone":        phone,
 		"password":     password,
 		"uuid":         "",
@@ -29,7 +29,7 @@ type PcLoginVerifyCodeData struct {
 
 func (w *WoClient) PcLoginVerifyCode(phone, password, messageCode string, opts ...RestyOption) (*PcLoginVerifyCodeData, error) {
 	var resp PcLoginVerifyCodeData
-	_, err := w.RequestApiUser("PcLoginVerifyCode", Json{
+	_, err := w.RequestApiUser(KeyPcLoginVerifyCode, Json{
 		"phone":        phone,
 		"messageCode":  messageCode,
 		"verifyCode":   nil,
@@ -57,7 +57,7 @@ type AppQueryUserData struct {
 
 func (w *WoClient) AppQueryUser(opts ...RestyOption) (*AppQueryUserData, error) {
 	var resp AppQueryUserData
-	_, err := w.RequestApiUser("AppQueryUser", Json{
+	_, err := w.RequestApiUser(KeyAppQueryUser, Json{
 		"accessToken": w.accessToken,
 	}, JsonClientIDSecret, &resp, opts...)
 	if err != nil {
