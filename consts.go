@@ -1,16 +1,24 @@
 package wopan
 
 const (
-	ClientID     = "1001000021"
-	ClientSecret = "XFmi9GS2hzk98jGX"
-	AppID        = "10000001"
-	BaseURL      = "https://panservice.mail.wo.cn/"
-	DefaultUA    = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.37"
+	DefaultClientID     = "1001000021"
+	DefaultClientSecret = "XFmi9GS2hzk98jGX"
+	DefaultAppID        = "10000001"
+	DefaultBaseURL      = "https://panservice.mail.wo.cn"
+	DefaultZoneURL      = "https://gxupload.pan.wo.cn:8443"
+	DefaultUA           = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.37"
+	DefaultPartSize     = int64(8 * 1024 * 1024)
 )
 
 const (
-	APIUserChannel = "api-user"
-	WoHomeChannel  = "wohome"
+	ChannelAPIUser = "api-user"
+	ChannelWoHome  = "wohome"
+	ChannelWoCloud = "wocloud"
+)
+
+const (
+	SpaceTypePersonal = "0"
+	SpaceTypeFamily   = "1"
 )
 
 // api-user methods

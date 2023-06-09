@@ -26,9 +26,9 @@ func (w *WoClient) QueryAllFiles(spaceType, parentDirectoryId string, pageNum, p
 		"pageNum":           pageNum,
 		"pageSize":          pageSize,
 		"sortRule":          sortRule,
-		"clientId":          ClientID,
+		"clientId":          DefaultClientID,
 	}
-	if spaceType == "1" {
+	if spaceType == SpaceTypeFamily {
 		param["familyId"] = familyId
 	}
 	_, err := w.RequestWoHome(KeyQueryAllFiles, param, JsonSecret, &resp, opts...)
@@ -39,11 +39,11 @@ func (w *WoClient) QueryAllFiles(spaceType, parentDirectoryId string, pageNum, p
 }
 
 func (w *WoClient) QueryAllFilesPersonal(parentDirectoryId string, pageNum, pageSize int, sortRule int, opts ...RestyOption) (*QueryAllFilesData, error) {
-	return w.QueryAllFiles("0", parentDirectoryId, pageNum, pageSize, sortRule, "", opts...)
+	return w.QueryAllFiles(SpaceTypePersonal, parentDirectoryId, pageNum, pageSize, sortRule, "", opts...)
 }
 
 func (w *WoClient) QueryAllFilesFamily(parentDirectoryId string, pageNum, pageSize int, sortRule int, familyId string, opts ...RestyOption) (*QueryAllFilesData, error) {
-	return w.QueryAllFiles("1", parentDirectoryId, pageNum, pageSize, sortRule, familyId, opts...)
+	return w.QueryAllFiles(SpaceTypeFamily, parentDirectoryId, pageNum, pageSize, sortRule, familyId, opts...)
 }
 
 // GetSearchDirectory??
@@ -61,7 +61,7 @@ func (w *WoClient) GetDownloadUrlV2(fidList []string, opts ...RestyOption) (*Get
 	param := Json{
 		"type":     "1",
 		"fidList":  fidList,
-		"clientId": ClientID,
+		"clientId": DefaultClientID,
 	}
 	_, err := w.RequestWoHome(KeyGetDownloadUrlV2, param, JsonSecret, &resp, opts...)
 	if err != nil {
@@ -100,7 +100,7 @@ func (w *WoClient) CreateDirectory(spaceType, parentDirectoryId string, director
 		"familyId":          familyId,
 		"parentDirectoryId": parentDirectoryId,
 		"directoryName":     directoryName,
-		"clientId":          ClientID,
+		"clientId":          DefaultClientID,
 	}
 	_, err := w.RequestWoHome(KeyCreateDirectory, param, JsonSecret, &resp, opts...)
 	if err != nil {
@@ -118,9 +118,9 @@ func (w *WoClient) RenameFileOrDirectory(spaceType string, _type int, id string,
 		"fileType":  w.GetFileType(name),
 		"id":        id,
 		"name":      name,
-		"clientId":  ClientID,
+		"clientId":  DefaultClientID,
 	}
-	if spaceType == "1" {
+	if spaceType == SpaceTypeFamily {
 		param["familyId"] = familyId
 	}
 	_, err := w.RequestWoHome(KeyRenameFileOrDirectory, param, JsonSecret, nil, opts...)
@@ -128,11 +128,11 @@ func (w *WoClient) RenameFileOrDirectory(spaceType string, _type int, id string,
 }
 
 func (w *WoClient) RenameFileOrDirectoryPersonal(_type int, id string, name string, opts ...RestyOption) error {
-	return w.RenameFileOrDirectory("0", _type, id, name, "", opts...)
+	return w.RenameFileOrDirectory(SpaceTypePersonal, _type, id, name, "", opts...)
 }
 
 func (w *WoClient) RenameFileOrDirectoryFamily(_type int, id string, name string, familyId string, opts ...RestyOption) error {
-	return w.RenameFileOrDirectory("1", _type, id, name, familyId, opts...)
+	return w.RenameFileOrDirectory(SpaceTypeFamily, _type, id, name, familyId, opts...)
 }
 
 func (w *WoClient) MoveFile(dirList, fileList []string, targetDirId string, sourceType, targetType string, fromFamilyId, targetFamilyId string, opts ...RestyOption) error {
@@ -143,12 +143,12 @@ func (w *WoClient) MoveFile(dirList, fileList []string, targetDirId string, sour
 		"dirList":     dirList,
 		"fileList":    fileList,
 		"secret":      false,
-		"clientId":    ClientID,
+		"clientId":    DefaultClientID,
 	}
-	if sourceType == "1" {
+	if sourceType == SpaceTypeFamily {
 		param["fromFamilyId"] = fromFamilyId
 	}
-	if targetType == "1" {
+	if targetType == SpaceTypeFamily {
 		param["familyId"] = targetFamilyId
 	}
 	_, err := w.RequestWoHome(KeyMoveFile, param, JsonSecret, nil, opts...)
@@ -163,12 +163,12 @@ func (w *WoClient) CopyFile(dirList, fileList []string, targetDirId string, sour
 		"dirList":     dirList,
 		"fileList":    fileList,
 		"secret":      false,
-		"clientId":    ClientID,
+		"clientId":    DefaultClientID,
 	}
-	if sourceType == "1" {
+	if sourceType == SpaceTypeFamily {
 		param["fromFamilyId"] = fromFamilyId
 	}
-	if targetType == "1" {
+	if targetType == SpaceTypeFamily {
 		param["familyId"] = targetFamilyId
 	}
 	_, err := w.RequestWoHome(KeyCopyFile, param, JsonSecret, nil, opts...)
@@ -181,7 +181,7 @@ func (w *WoClient) DeleteFile(spaceType string, dirList, fileList []string, opts
 		"vipLevel":  "0",
 		"dirList":   dirList,
 		"fileList":  fileList,
-		"clientId":  ClientID,
+		"clientId":  DefaultClientID,
 	}
 	_, err := w.RequestWoHome(KeyDeleteFile, param, JsonSecret, nil, opts...)
 	return err
@@ -189,7 +189,7 @@ func (w *WoClient) DeleteFile(spaceType string, dirList, fileList []string, opts
 
 func (w *WoClient) EmptyRecycleData(opts ...RestyOption) error {
 	param := Json{
-		"clientId": ClientID,
+		"clientId": DefaultClientID,
 	}
 	_, err := w.RequestWoHome(KeyEmptyRecycleData, param, JsonSecret, nil, opts...)
 	return err

@@ -17,7 +17,7 @@ import (
 //}
 
 func TestWoClient_AppQueryUser(t *testing.T) {
-	w := wopan.DefaultWithAccessToken("91d4b946-1e58-4909-bac1-d9914e45f2de")
+	w := wopan.DefaultWithAccessToken("91d4b946-xxxx-4909-bac1-d9914e45f2de")
 	res, err := w.AppQueryUser()
 	if err != nil {
 		t.Errorf("AppQueryUser() error = %v", err)

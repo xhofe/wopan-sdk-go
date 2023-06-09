@@ -2,7 +2,7 @@ package wopan
 
 var (
 	JsonClientIDSecret = Json{
-		"clientId": ClientID,
+		"clientId": DefaultClientID,
 		"secret":   true,
 	}
 	JsonSecret = Json{

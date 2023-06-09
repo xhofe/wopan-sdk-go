@@ -27,7 +27,7 @@ func (w *WoClient) Request(channel string, key string, param, other Json, resp i
 	for _, opt := range opts {
 		opt(req)
 	}
-	res, err := req.Post(fmt.Sprintf("%s%s/dispatcher", BaseURL, channel))
+	res, err := req.Post(fmt.Sprintf("%s/%s/dispatcher", DefaultBaseURL, channel))
 	if err != nil {
 		return nil, err
 	}
@@ -58,9 +58,9 @@ func (w *WoClient) Request(channel string, key string, param, other Json, resp i
 }
 
 func (w *WoClient) RequestApiUser(key string, param, other Json, resp interface{}, opts ...RestyOption) ([]byte, error) {
-	return w.Request(APIUserChannel, key, param, other, resp, opts...)
+	return w.Request(ChannelAPIUser, key, param, other, resp, opts...)
 }
 
 func (w *WoClient) RequestWoHome(key string, param, other Json, resp interface{}, opts ...RestyOption) ([]byte, error) {
-	return w.Request(WoHomeChannel, key, param, other, resp, opts...)
+	return w.Request(ChannelWoHome, key, param, other, resp, opts...)
 }

@@ -55,7 +55,7 @@ func (w *WoClient) FCloudProductOrdListQry(opts ...RestyOption) (*FCloudProductO
 	var resp FCloudProductOrdListQryCtxData
 	_, err := w.RequestWoHome(KeyFCloudProductOrdListQry, nil, Json{
 		"qryType":  "1",
-		"clientId": ClientID,
+		"clientId": DefaultClientID,
 	}, &resp, opts...)
 	if err != nil {
 		return nil, err
@@ -95,7 +95,7 @@ func (w *WoClient) QueryCloudUsageInfo(opts ...RestyOption) (*QueryCloudUsageInf
 	var resp QueryCloudUsageInfoData
 	_, err := w.RequestWoHome(KeyQueryCloudUsageInfo, Json{
 		"phoneNum": w.phone,
-		"clientId": ClientID,
+		"clientId": DefaultClientID,
 	}, Json{
 		"secret": true,
 	}, &resp, opts...)
@@ -165,17 +165,26 @@ type GetZoneInfoData struct {
 func (w *WoClient) GetZoneInfo(opts ...RestyOption) (*GetZoneInfoData, error) {
 	var resp GetZoneInfoData
 	_, err := w.RequestWoHome(KeyGetZoneInfo, Json{
-		"appId": AppID,
+		"appId": DefaultAppID,
 	}, Json{
 		"key": true,
 	}, &resp, opts...)
 	if err != nil {
 		return nil, err
 	}
-	if w.zoneURL == "" {
-		w.zoneURL = resp.Url
-	}
 	return &resp, nil
+}
+
+func (w *WoClient) InitZoneURL() error {
+	if w.zoneURL != "" {
+		return nil
+	}
+	data, err := w.GetZoneInfo()
+	if err != nil {
+		return err
+	}
+	w.zoneURL = data.Url
+	return nil
 }
 
 type FamilyUserCurrentEncodeData struct {
@@ -193,7 +202,7 @@ type FamilyUserCurrentEncodeData struct {
 func (w *WoClient) FamilyUserCurrentEncode(opts ...RestyOption) (*FamilyUserCurrentEncodeData, error) {
 	var resp FamilyUserCurrentEncodeData
 	_, err := w.RequestWoHome(KeyFamilyUserCurrentEncode, Json{
-		"clientId": ClientID,
+		"clientId": DefaultClientID,
 	}, Json{
 		"secret": true,
 	}, &resp, opts...)

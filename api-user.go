@@ -12,7 +12,7 @@ func (w *WoClient) PcWebLogin(phone, password string, opts ...RestyOption) (*PcW
 		"password":     password,
 		"uuid":         "",
 		"verifyCode":   "",
-		"clientSecret": ClientSecret,
+		"clientSecret": DefaultClientSecret,
 	}, JsonClientIDSecret, &resp, opts...)
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func (w *WoClient) PcLoginVerifyCode(phone, password, messageCode string, opts .
 		"messageCode":  messageCode,
 		"verifyCode":   nil,
 		"uuid":         nil,
-		"clientSecret": ClientSecret,
+		"clientSecret": DefaultClientSecret,
 		"password":     password,
 	}, JsonClientIDSecret, &resp, opts...)
 	if err != nil {
