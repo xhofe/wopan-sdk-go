@@ -105,7 +105,58 @@ func (w *WoClient) QueryCloudUsageInfo(opts ...RestyOption) (*QueryCloudUsageInf
 	return &resp, nil
 }
 
-// FCloudProductPackageData is not required
+// FCloudProductPackage is not required
+
+type ClassifyRuleData struct {
+	FileTypes map[string]struct {
+		SubType string `json:"subType"`
+		Ability string `json:"ability"`
+		Type    string `json:"type"`
+	} `json:"fileTypes"`
+	FileIcons struct {
+		App struct {
+			Zip   string `json:"zip"`
+			Image string `json:"image"`
+			Other string `json:"other"`
+			Xmind string `json:"xmind"`
+			Gif   string `json:"gif"`
+			Csv   string `json:"csv"`
+			Video string `json:"video"`
+			Excel string `json:"excel"`
+			Pdf   string `json:"pdf"`
+			Ppt   string `json:"ppt"`
+			Doc   string `json:"doc"`
+			Audio string `json:"audio"`
+			Text  string `json:"text"`
+			Word  string `json:"word"`
+		} `json:"app"`
+		H5 struct {
+		} `json:"h5"`
+	} `json:"fileIcons"`
+}
+
+func (w *WoClient) ClassifyRule(opts ...RestyOption) (*ClassifyRuleData, error) {
+	var resp ClassifyRuleData
+	_, err := w.RequestWoHome(KeyClassifyRule, Json{}, Json{
+		"key": true,
+	}, &resp, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (w *WoClient) InitClassifyRuleData() error {
+	if w.classifyRule != nil {
+		return nil
+	}
+	data, err := w.ClassifyRule()
+	if err != nil {
+		return err
+	}
+	w.classifyRule = data
+	return nil
+}
 
 type GetZoneInfoData struct {
 	Url string `json:"url"`

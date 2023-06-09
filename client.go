@@ -3,6 +3,7 @@ package wopan
 import (
 	"encoding/json"
 	"net/http"
+	"path"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -16,8 +17,9 @@ type WoClient struct {
 	jsonMarshalFunc   func(v interface{}) ([]byte, error)
 	jsonUnmarshalFunc func(data []byte, v interface{}) error
 
-	phone   string
-	zoneURL string
+	phone        string
+	zoneURL      string
+	classifyRule *ClassifyRuleData
 }
 
 func New(opts ...Option) *WoClient {
@@ -105,4 +107,20 @@ func (w *WoClient) SetProxy(proxy string) *WoClient {
 
 func (w *WoClient) NewRequest() *resty.Request {
 	return w.client.R()
+}
+
+func (w *WoClient) GetFileType(filename string) string {
+	ext := path.Ext(filename)
+	if ext == "" {
+		return "5"
+	}
+	ext = ext[1:]
+	err := w.InitClassifyRuleData()
+	if err != nil {
+		return "5"
+	}
+	if _type, ok := w.classifyRule.FileTypes[ext]; ok {
+		return _type.Type
+	}
+	return "5"
 }
