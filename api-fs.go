@@ -75,18 +75,18 @@ type GetDownloadUrlData struct {
 	DownloadUrl string `json:"downloadUrl"`
 }
 
-func (w *WoClient) GetDownloadUrl(spaceType string, fidList []string, opts ...RestyOption) (*GetDownloadUrlData, error) {
-	var resp GetDownloadUrlData
+func (w *WoClient) GetDownloadUrl(spaceType string, fidList []string, opts ...RestyOption) ([]GetDownloadUrlData, error) {
+	var resp []GetDownloadUrlData
 	param := Json{
 		"fidList":   fidList,
-		"clientId":  "1001000001", // ???
+		"clientId":  DefaultClientID, // ???
 		"spaceType": spaceType,
 	}
 	_, err := w.RequestWoHome(KeyGetDownloadUrl, param, JsonSecret, &resp, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return resp, nil
 }
 
 type CreateDirectoryData struct {

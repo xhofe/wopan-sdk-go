@@ -96,9 +96,7 @@ func (w *WoClient) QueryCloudUsageInfo(opts ...RestyOption) (*QueryCloudUsageInf
 	_, err := w.RequestWoHome(KeyQueryCloudUsageInfo, Json{
 		"phoneNum": w.phone,
 		"clientId": DefaultClientID,
-	}, Json{
-		"secret": true,
-	}, &resp, opts...)
+	}, JsonSecret, &resp, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -203,9 +201,7 @@ func (w *WoClient) FamilyUserCurrentEncode(opts ...RestyOption) (*FamilyUserCurr
 	var resp FamilyUserCurrentEncodeData
 	_, err := w.RequestWoHome(KeyFamilyUserCurrentEncode, Json{
 		"clientId": DefaultClientID,
-	}, Json{
-		"secret": true,
-	}, &resp, opts...)
+	}, JsonSecret, &resp, opts...)
 	if err != nil {
 		return nil, err
 	}
