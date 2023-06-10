@@ -1,5 +1,7 @@
 package wopan
 
+import "encoding/json"
+
 type Json map[string]interface{}
 
 type Header struct {
@@ -21,8 +23,8 @@ type Resp struct {
 	Msg    string `json:"MSG"`
 	LogID  string `json:"LOGID"`
 	Rsp    struct {
-		RspCode string      `json:"RSP_CODE"`
-		RspDesc string      `json:"RSP_DESC"`
-		Data    interface{} `json:"DATA"`
+		RspCode string          `json:"RSP_CODE"`
+		RspDesc string          `json:"RSP_DESC"`
+		Data    json.RawMessage `json:"DATA"`
 	} `json:"RSP"`
 }
