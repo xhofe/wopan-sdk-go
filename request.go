@@ -2,6 +2,7 @@ package wopan
 
 import (
 	"fmt"
+	"strings"
 )
 
 func (w *WoClient) Request(channel string, key string, param, other Json, resp interface{}, opts ...RestyOption) ([]byte, error) {
@@ -41,17 +42,16 @@ func (w *WoClient) Request(channel string, key string, param, other Json, resp i
 		return res.Body(), fmt.Errorf("request failed with rsp_code: %s,rep_desc: %s", _resp.Rsp.RspCode, _resp.Rsp.RspDesc)
 	}
 	if resp != nil {
-		if encrypted, ok := _resp.Rsp.Data.(string); ok {
-			strData, err := w.crypto.Decrypt(encrypted, channel)
+		data := string(_resp.Rsp.Data)
+		if strings.HasSuffix(data, "\"") && strings.HasPrefix(data, "\"") {
+			data, err = w.crypto.Decrypt(data[1:len(data)-1], channel)
 			if err != nil {
 				return res.Body(), err
 			}
-			err = w.jsonUnmarshalFunc([]byte(strData), resp)
-			if err != nil {
-				return res.Body(), err
-			}
-		} else {
-			CopyStruct(_resp.Rsp.Data, resp)
+		}
+		err = w.jsonUnmarshalFunc([]byte(data), resp)
+		if err != nil {
+			return res.Body(), err
 		}
 	}
 	return res.Body(), nil

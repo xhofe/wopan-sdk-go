@@ -10,7 +10,7 @@ type Crypto struct {
 
 func NewCrypto() *Crypto {
 	c := &Crypto{
-		key: []byte("XFmi9GS2hzk98jGX"),
+		key: []byte(DefaultClientSecret),
 		iv:  []byte("wNSOYIB1k1DjY5lA"),
 	}
 	return c
@@ -22,7 +22,7 @@ func (c *Crypto) SetAccessToken(token string) {
 
 func (c *Crypto) EncryptBytes(bs []byte, channel string) (string, error) {
 	key := c.accessKey
-	if channel == "api-user" {
+	if channel == ChannelAPIUser {
 		key = c.key
 	}
 	res, err := AesEncrypt(bs, key, c.iv)
@@ -42,7 +42,7 @@ func (c *Crypto) Decrypt(content string, channel string) (string, error) {
 		return "", err
 	}
 	key := c.accessKey
-	if channel == "api-user" {
+	if channel == ChannelAPIUser {
 		key = c.key
 	}
 	res, err := AesDecrypt(bs, key, c.iv)
@@ -53,17 +53,17 @@ func (c *Crypto) Decrypt(content string, channel string) (string, error) {
 }
 
 func (c *Crypto) UserEncrypt(content string) (string, error) {
-	return c.Encrypt(content, "api-user")
+	return c.Encrypt(content, ChannelAPIUser)
 }
 
 func (c *Crypto) UserDecrypt(content string) (string, error) {
-	return c.Decrypt(content, "api-user")
+	return c.Decrypt(content, ChannelAPIUser)
 }
 
 func (c *Crypto) WoHomeEncrypt(content string) (string, error) {
-	return c.Encrypt(content, "wohome")
+	return c.Encrypt(content, ChannelWoHome)
 }
 
 func (c *Crypto) WoHomeDecrypt(content string) (string, error) {
-	return c.Decrypt(content, "wohome")
+	return c.Decrypt(content, ChannelWoHome)
 }

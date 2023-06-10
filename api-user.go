@@ -69,12 +69,30 @@ func (w *WoClient) AppQueryUser(opts ...RestyOption) (*AppQueryUserData, error) 
 	return &resp, nil
 }
 
-// TODO we don't know refresh token method now.
-//func (w *WoClient) RefreshToken() ([]byte, error) {
-//	res, err := w.RequestApiUser("AppRefreshToken", Json{
-//		"refreshToken": w.refreshToken,
-//	}, JsonClientIDSecret, nil, ReqOpt{
-//		NoAccessToken: true,
-//	})
-//	return res, err
-//}
+// AppRefreshTokenData no encrypt
+type AppRefreshTokenData struct {
+	AccessToken  string `json:"access_token"`
+	TokenType    string `json:"token_type"`
+	RefreshToken string `json:"refresh_token"`
+	ExpiresIn    int    `json:"expires_in"`
+	Scope        string `json:"scope"`
+}
+
+func (w *WoClient) RefreshToken() (*AppRefreshTokenData, error) {
+	var resp AppRefreshTokenData
+	_, err := w.RequestApiUser(KeyAppRefreshToken, Json{
+		"refreshToken": w.refreshToken,
+		"clientSecret": DefaultClientSecret,
+	}, JsonClientIDSecret, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, err
+}
+
+func (w *WoClient) Logout() error {
+	_, err := w.RequestApiUser(KeyAppLogout, Json{
+		"accessToken": w.accessToken,
+	}, JsonClientIDSecret, nil)
+	return err
+}

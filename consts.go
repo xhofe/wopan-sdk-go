@@ -1,6 +1,10 @@
 package wopan
 
 const (
+	// app:
+	// 1001000035
+	// iELf0UL07o6I8eRK
+
 	DefaultClientID     = "1001000021"
 	DefaultClientSecret = "XFmi9GS2hzk98jGX"
 	DefaultAppID        = "10000001"
@@ -26,6 +30,8 @@ const (
 	KeyPcWebLogin        = "PcWebLogin"        // ReqWithParam
 	KeyPcLoginVerifyCode = "PcLoginVerifyCode" // ReqWithParam
 	KeyAppQueryUser      = "AppQueryUser"      // ReqWithParam
+	KeyAppRefreshToken   = "AppRefreshToken"   // ReqWithParam
+	KeyAppLogout         = "AppLogout"         // ReqWithParam
 )
 
 // wohome methods

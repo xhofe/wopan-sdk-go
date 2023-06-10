@@ -24,8 +24,10 @@ type WoClient struct {
 
 func New(opts ...Option) *WoClient {
 	w := &WoClient{
-		client: resty.New(),
-		crypto: NewCrypto(),
+		client:            resty.New(),
+		crypto:            NewCrypto(),
+		jsonMarshalFunc:   json.Marshal,
+		jsonUnmarshalFunc: json.Unmarshal,
 	}
 	for _, opt := range opts {
 		opt(w)
@@ -47,11 +49,7 @@ func DefaultWithRefreshToken(refreshToken string) *WoClient {
 }
 
 func Default() *WoClient {
-	return New(
-		WithUA(DefaultUA),
-		WithJsonMarshalFunc(json.Marshal),
-		WithJsonUnmarshalFunc(json.Unmarshal),
-	)
+	return New(WithUA(DefaultUA))
 }
 
 func (w *WoClient) SetUA(ua string) {
