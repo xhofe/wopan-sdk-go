@@ -1,5 +1,7 @@
 package wopan
 
+import "errors"
+
 var (
 	JsonClientIDSecret = Json{
 		"clientId": DefaultClientID,
@@ -8,4 +10,8 @@ var (
 	JsonSecret = Json{
 		"secret": true,
 	}
+)
+
+var (
+	ErrInvalidAccessToken = errors.New("invalid access token")
 )

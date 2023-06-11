@@ -63,9 +63,6 @@ func (w *WoClient) AppQueryUser(opts ...RestyOption) (*AppQueryUserData, error) 
 	if err != nil {
 		return nil, err
 	}
-	if w.phone == "" {
-		w.phone = resp.UserId
-	}
 	return &resp, nil
 }
 
@@ -78,21 +75,21 @@ type AppRefreshTokenData struct {
 	Scope        string `json:"scope"`
 }
 
-func (w *WoClient) RefreshToken() (*AppRefreshTokenData, error) {
+func (w *WoClient) AppRefreshToken(opts ...RestyOption) (*AppRefreshTokenData, error) {
 	var resp AppRefreshTokenData
 	_, err := w.RequestApiUser(KeyAppRefreshToken, Json{
 		"refreshToken": w.refreshToken,
 		"clientSecret": DefaultClientSecret,
-	}, JsonClientIDSecret, &resp)
+	}, JsonClientIDSecret, &resp, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return &resp, err
 }
 
-func (w *WoClient) Logout() error {
+func (w *WoClient) AppLogout(opts ...RestyOption) error {
 	_, err := w.RequestApiUser(KeyAppLogout, Json{
 		"accessToken": w.accessToken,
-	}, JsonClientIDSecret, nil)
+	}, JsonClientIDSecret, nil, opts...)
 	return err
 }

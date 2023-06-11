@@ -30,7 +30,7 @@ func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId str
 	zoneURL := DefaultZoneURL
 	err := w.InitZoneURL()
 	if err != nil {
-		zoneURL = w.zoneURL
+		zoneURL = w.ZoneURL
 	}
 	batchNo := time.Now().Format("20060102150405")
 	fileInfo := Json{
@@ -48,7 +48,7 @@ func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId str
 	if err != nil {
 		return "", err
 	}
-	uploadURL := zoneURL + "/openapi/client/upload2C"
+	uploadURL := zoneURL + "/openapi/client/" + KeyUpload2C
 	totalPart := file.Size / DefaultPartSize
 	if totalPart == 0 {
 		totalPart = 1

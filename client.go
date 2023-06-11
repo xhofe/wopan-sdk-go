@@ -9,17 +9,18 @@ import (
 )
 
 type WoClient struct {
+	accessToken  string
+	refreshToken string
+
 	client            *resty.Client
 	crypto            *Crypto
-	accessToken       string
-	refreshToken      string
 	ua                string
 	jsonMarshalFunc   func(v interface{}) ([]byte, error)
 	jsonUnmarshalFunc func(data []byte, v interface{}) error
 
-	phone        string
-	zoneURL      string
-	classifyRule *ClassifyRuleData
+	Phone            string
+	ZoneURL          string
+	ClassifyRuleData *ClassifyRuleData
 }
 
 func New(opts ...Option) *WoClient {
@@ -41,7 +42,6 @@ func DefaultWithAccessToken(accessToken string) *WoClient {
 	return w
 }
 
-// DefaultWithRefreshToken it doesn't work now, because we don't know refresh token method now.
 func DefaultWithRefreshToken(refreshToken string) *WoClient {
 	w := Default()
 	w.SetRefreshToken(refreshToken)
@@ -66,11 +66,15 @@ func (w *WoClient) SetJsonUnmarshalFunc(f func(data []byte, v interface{}) error
 
 func (w *WoClient) SetAccessToken(token string) {
 	w.accessToken = token
-	w.crypto.SetAccessToken(token)
+	_ = w.crypto.SetAccessToken(token)
 }
 
 func (w *WoClient) SetRefreshToken(token string) {
 	w.refreshToken = token
+}
+
+func (w *WoClient) GetToken() (string, string) {
+	return w.accessToken, w.refreshToken
 }
 
 func (w *WoClient) SetHttpClient(httpClient *http.Client) *WoClient {
@@ -80,11 +84,6 @@ func (w *WoClient) SetHttpClient(httpClient *http.Client) *WoClient {
 
 func (w *WoClient) SetUserAgent(userAgent string) *WoClient {
 	w.client.SetHeader("User-Agent", userAgent)
-	return w
-}
-
-func (w *WoClient) SetCookies(cs ...*http.Cookie) *WoClient {
-	w.client.SetCookies(cs)
 	return w
 }
 
@@ -113,11 +112,11 @@ func (w *WoClient) GetFileType(filename string) string {
 		return "5"
 	}
 	ext = ext[1:]
-	err := w.InitClassifyRuleData()
+	err := w.InitClassifyRule()
 	if err != nil {
 		return "5"
 	}
-	if _type, ok := w.classifyRule.FileTypes[ext]; ok {
+	if _type, ok := w.ClassifyRuleData.FileTypes[ext]; ok {
 		return _type.Type
 	}
 	return "5"

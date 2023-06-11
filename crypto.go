@@ -16,8 +16,12 @@ func NewCrypto() *Crypto {
 	return c
 }
 
-func (c *Crypto) SetAccessToken(token string) {
+func (c *Crypto) SetAccessToken(token string) error {
+	if len(token) < 16 {
+		return ErrInvalidAccessToken
+	}
 	c.accessKey = []byte(token[:16])
+	return nil
 }
 
 func (c *Crypto) EncryptBytes(bs []byte, channel string) (string, error) {

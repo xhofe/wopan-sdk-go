@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func (w *WoClient) Request(channel string, key string, param, other Json, resp interface{}, opts ...RestyOption) ([]byte, error) {
+func (w *WoClient) request(channel string, key string, param, other Json, resp interface{}, retry bool, opts ...RestyOption) ([]byte, error) {
 	req := w.NewRequest()
 	req.SetHeaders(map[string]string{
 		"Origin":  "https://pan.wo.cn",
@@ -39,6 +39,13 @@ func (w *WoClient) Request(channel string, key string, param, other Json, resp i
 		return res.Body(), fmt.Errorf("request failed with status: %s, msg: %s", _resp.Status, _resp.Msg)
 	}
 	if _resp.Rsp.RspCode != "0000" {
+		if !retry /*&& _resp.Rsp.RspCode == "9999"*/ {
+			err := w.RefreshToken()
+			if err != nil {
+				return res.Body(), err
+			}
+			return w.request(channel, key, param, other, resp, true, opts...)
+		}
 		return res.Body(), fmt.Errorf("request failed with rsp_code: %s,rep_desc: %s", _resp.Rsp.RspCode, _resp.Rsp.RspDesc)
 	}
 	if resp != nil {
@@ -55,6 +62,10 @@ func (w *WoClient) Request(channel string, key string, param, other Json, resp i
 		}
 	}
 	return res.Body(), nil
+}
+
+func (w *WoClient) Request(channel string, key string, param, other Json, resp interface{}, opts ...RestyOption) ([]byte, error) {
+	return w.request(channel, key, param, other, resp, false, opts...)
 }
 
 func (w *WoClient) RequestApiUser(key string, param, other Json, resp interface{}, opts ...RestyOption) ([]byte, error) {

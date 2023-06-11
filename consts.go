@@ -27,19 +27,19 @@ const (
 
 // api-user methods
 const (
-	KeyPcWebLogin        = "PcWebLogin"        // ReqWithParam
-	KeyPcLoginVerifyCode = "PcLoginVerifyCode" // ReqWithParam
-	KeyAppQueryUser      = "AppQueryUser"      // ReqWithParam
-	KeyAppRefreshToken   = "AppRefreshToken"   // ReqWithParam
-	KeyAppLogout         = "AppLogout"         // ReqWithParam
+	KeyPcWebLogin        = "PcWebLogin"
+	KeyPcLoginVerifyCode = "PcLoginVerifyCode"
+	KeyAppQueryUser      = "AppQueryUser"
+	KeyAppRefreshToken   = "AppRefreshToken"
+	KeyAppLogout         = "AppLogout"
 )
 
 // wohome methods
 const (
-	KeyFCloudProductOrdListQry = "FCloudProductOrdListQry" // ReqWithQry
-	KeyQueryCloudUsageInfo     = "QueryCloudUsageInfo"     // ReqWithParamNoClientId
-	KeyFCloudProductPackage    = "FCloudProductPackage"    // ReqWithT
-	KeyClassifyRule            = "ClassifyRule"            // ReqWithKey
+	KeyFCloudProductOrdListQry = "FCloudProductOrdListQry"
+	KeyQueryCloudUsageInfo     = "QueryCloudUsageInfo"
+	KeyFCloudProductPackage    = "FCloudProductPackage"
+	KeyClassifyRule            = "ClassifyRule"
 	KeyGetZoneInfo             = "GetZoneInfo"
 	KeyQuerySysConfig          = "QuerySysConfig"
 	KeyFamilyUserCurrentEncode = "FamilyUserCurrentEncode"
@@ -53,7 +53,7 @@ const (
 	KeyCopyFile                = "CopyFile"
 	KeyDeleteFile              = "DeleteFile"
 	KeyEmptyRecycleData        = "EmptyRecycleData"
-	KeyUpload2C                = "Upload2C"
+	KeyUpload2C                = "upload2C"
 )
 
 const (

@@ -86,15 +86,13 @@ type QueryCloudUsageInfoData struct {
 }
 
 func (w *WoClient) QueryCloudUsageInfo(opts ...RestyOption) (*QueryCloudUsageInfoData, error) {
-	if w.phone == "" {
-		_, err := w.AppQueryUser(opts...)
-		if err != nil {
-			return nil, err
-		}
+	err := w.InitPhone()
+	if err != nil {
+		return nil, err
 	}
 	var resp QueryCloudUsageInfoData
-	_, err := w.RequestWoHome(KeyQueryCloudUsageInfo, Json{
-		"phoneNum": w.phone,
+	_, err = w.RequestWoHome(KeyQueryCloudUsageInfo, Json{
+		"phoneNum": w.Phone,
 		"clientId": DefaultClientID,
 	}, JsonSecret, &resp, opts...)
 	if err != nil {
@@ -144,18 +142,6 @@ func (w *WoClient) ClassifyRule(opts ...RestyOption) (*ClassifyRuleData, error) 
 	return &resp, nil
 }
 
-func (w *WoClient) InitClassifyRuleData() error {
-	if w.classifyRule != nil {
-		return nil
-	}
-	data, err := w.ClassifyRule()
-	if err != nil {
-		return err
-	}
-	w.classifyRule = data
-	return nil
-}
-
 type GetZoneInfoData struct {
 	Url string `json:"url"`
 }
@@ -171,18 +157,6 @@ func (w *WoClient) GetZoneInfo(opts ...RestyOption) (*GetZoneInfoData, error) {
 		return nil, err
 	}
 	return &resp, nil
-}
-
-func (w *WoClient) InitZoneURL() error {
-	if w.zoneURL != "" {
-		return nil
-	}
-	data, err := w.GetZoneInfo()
-	if err != nil {
-		return err
-	}
-	w.zoneURL = data.Url
-	return nil
 }
 
 type FamilyUserCurrentEncodeData struct {
