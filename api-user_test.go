@@ -16,6 +16,14 @@ import (
 //	}
 //}
 
+func TestWoClient_PcWebLogin(t *testing.T) {
+	w := wopan.Default()
+	_, err := w.PcWebLogin("", "")
+	if err != nil {
+		t.Logf("PcWebLogin() error = %v", err)
+	}
+}
+
 func TestWoClient_AppQueryUser(t *testing.T) {
 	w := wopan.DefaultWithAccessToken("91d4b946-xxxx-4909-bac1-d9914e45f2de")
 	res, err := w.AppQueryUser()
