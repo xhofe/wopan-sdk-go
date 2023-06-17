@@ -67,13 +67,13 @@ type QueryCloudUsageInfoData struct {
 	Code      string `json:"code"`
 	UsageInfo struct {
 		TotalSize     string `json:"totalSize"`
-		UsedSize      int    `json:"usedSize"`
-		ImageSize     int    `json:"imageSize"`
-		VideoSize     int    `json:"videoSize"`
-		AudioSize     int    `json:"audioSize"`
-		TextSize      int    `json:"textSize"`
-		OtherSize     int    `json:"otherSize"`
-		ByteUsedSize  int    `json:"byteUsedSize"`
+		UsedSize      int64  `json:"usedSize"`
+		ImageSize     int64  `json:"imageSize"`
+		VideoSize     int64  `json:"videoSize"`
+		AudioSize     int64  `json:"audioSize"`
+		TextSize      int64  `json:"textSize"`
+		OtherSize     int64  `json:"otherSize"`
+		ByteUsedSize  int64  `json:"byteUsedSize"`
 		ByteTotalSize string `json:"byteTotalSize"`
 	} `json:"usageInfo"`
 	VipLevel   string `json:"vipLevel"`

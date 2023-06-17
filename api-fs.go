@@ -4,7 +4,7 @@ type File struct {
 	FamilyId     int    `json:"familyId"`
 	Fid          string `json:"fid"`
 	Creator      string `json:"creator"`
-	Size         int    `json:"size"`
+	Size         int64  `json:"size"`
 	CreateTime   string `json:"createTime"`
 	Name         string `json:"name"`
 	ShootingTime string `json:"shootingTime"`
