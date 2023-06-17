@@ -112,10 +112,14 @@ func (w *WoClient) CreateDirectory(spaceType, parentDirectoryId string, director
 // RenameFileOrDirectory
 // _type: 1: file, 0: directory
 func (w *WoClient) RenameFileOrDirectory(spaceType string, _type int, id string, name string, familyId string, opts ...RestyOption) error {
+	fileType := "0"
+	if _type != 0 {
+		fileType = w.GetFileType(name)
+	}
 	param := Json{
 		"spaceType": spaceType,
 		"type":      _type,
-		"fileType":  w.GetFileType(name),
+		"fileType":  fileType,
 		"id":        id,
 		"name":      name,
 		"clientId":  DefaultClientID,

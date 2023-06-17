@@ -40,6 +40,7 @@ func (w *WoClient) RefreshToken() error {
 	if err != nil {
 		return err
 	}
+	w.onRefreshToken(resp.AccessToken, resp.RefreshToken)
 	w.SetAccessToken(resp.AccessToken)
 	w.SetRefreshToken(resp.RefreshToken)
 	return nil

@@ -21,6 +21,8 @@ type WoClient struct {
 	Phone            string
 	ZoneURL          string
 	ClassifyRuleData *ClassifyRuleData
+
+	onRefreshToken func(accessToken, refreshToken string)
 }
 
 func New(opts ...Option) *WoClient {
@@ -120,4 +122,8 @@ func (w *WoClient) GetFileType(filename string) string {
 		return _type.Type
 	}
 	return "5"
+}
+
+func (w *WoClient) OnRefreshToken(f func(accessToken, refreshToken string)) {
+	w.onRefreshToken = f
 }
