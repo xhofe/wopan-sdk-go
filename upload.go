@@ -1,6 +1,7 @@
 package wopan
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"strconv"
@@ -9,6 +10,7 @@ import (
 
 type Upload2COption struct {
 	OnProgress func(current, total int64)
+	Ctx        context.Context
 }
 
 type Upload2CFile struct {
@@ -71,6 +73,13 @@ func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId str
 	var fid string
 	var finishedSize int64 = 0
 	for partIndex := int64(1); partIndex <= totalPart; partIndex++ {
+		if opt.Ctx != nil {
+			select {
+			case <-opt.Ctx.Done():
+				return "", opt.Ctx.Err()
+			default:
+			}
+		}
 		partSize := DefaultPartSize
 		if partIndex == totalPart {
 			partSize = file.Size - finishedSize
@@ -78,7 +87,7 @@ func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId str
 		formData["partSize"] = strconv.FormatInt(partSize, 10)
 		formData["partIndex"] = strconv.FormatInt(partIndex, 10)
 
-		res, err := w.NewRequest().
+		req := w.NewRequest().
 			SetResult(&resp).
 			ForceContentType("application/json;charset=UTF-8").
 			SetHeaders(map[string]string{
@@ -87,8 +96,11 @@ func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId str
 				"User-Agent": w.ua,
 			}).
 			SetMultipartFormData(formData).
-			SetMultipartField("file", file.Name, file.ContentType, io.LimitReader(file.Content, partSize)).
-			Post(uploadURL)
+			SetMultipartField("file", file.Name, file.ContentType, io.LimitReader(file.Content, partSize))
+		if opt.Ctx != nil {
+			req.SetContext(opt.Ctx)
+		}
+		res, err := req.Post(uploadURL)
 		if err != nil {
 			return "", err
 		}
