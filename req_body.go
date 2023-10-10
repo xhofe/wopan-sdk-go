@@ -23,6 +23,8 @@ func (w *WoClient) NewBody(channel string, param, other Json) (Json, error) {
 	if err != nil {
 		return nil, err
 	}
-	other["param"] = encrypted
-	return other, nil
+	// copy other to avoid modifying the original and concurrent map writes
+	_other := copyJson(other)
+	_other["param"] = encrypted
+	return _other, nil
 }

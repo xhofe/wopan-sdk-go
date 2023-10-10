@@ -4,6 +4,14 @@ import "encoding/json"
 
 type Json map[string]interface{}
 
+func copyJson(src Json) Json {
+	dst := make(Json, len(src))
+	for k, v := range src {
+		dst[k] = v
+	}
+	return dst
+}
+
 type Header struct {
 	Key     string `json:"key"`
 	ResTime int64  `json:"resTime"`
