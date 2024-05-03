@@ -1,4 +1,4 @@
-module github.com/Xhofe/wopan-sdk-go
+module github.com/xhofe/wopan-sdk-go
 
 go 1.20
 
