@@ -3,7 +3,7 @@ package wopan_test
 import (
 	"testing"
 
-	"github.com/xhofe/wopan-sdk-go"
+	"github.com/1944876825/wopan-sdk-go"
 )
 
 //func TestWoClient_RefreshToken(t *testing.T) {
