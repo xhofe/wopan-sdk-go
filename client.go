@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"path"
+	"sync"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -20,6 +21,7 @@ type WoClient struct {
 
 	Phone            string
 	ZoneURL          string
+	zoneURLOnce      sync.Once
 	ClassifyRuleData *ClassifyRuleData
 
 	onRefreshToken func(accessToken, refreshToken string)

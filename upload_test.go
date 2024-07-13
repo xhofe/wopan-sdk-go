@@ -1,9 +1,10 @@
 package wopan_test
 
 import (
-	"github.com/1944876825/wopan-sdk-go"
 	"os"
 	"testing"
+
+	"github.com/xhofe/wopan-sdk-go"
 )
 
 func TestWoClient_Upload2C(t *testing.T) {

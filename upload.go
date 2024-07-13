@@ -30,8 +30,10 @@ type Upload2CResp struct {
 
 func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId string, familyId string, opt Upload2COption) (string, error) {
 	zoneURL := DefaultZoneURL
-	err := w.InitZoneURL()
-	if err != nil {
+	w.zoneURLOnce.Do(func() {
+		_ = w.InitZoneURL()
+	})
+	if w.ZoneURL != "" {
 		zoneURL = w.ZoneURL
 	}
 	batchNo := time.Now().Format("20060102150405")
