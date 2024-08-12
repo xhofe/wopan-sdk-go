@@ -20,6 +20,12 @@ func WithRefreshToken(token string) Option {
 	}
 }
 
+func WithPsToken(psToken string) Option {
+	return func(w *WoClient) {
+		w.SetPsToken(psToken)
+	}
+}
+
 func WithUA(ua string) Option {
 	return func(w *WoClient) {
 		w.SetUA(ua)

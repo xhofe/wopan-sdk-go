@@ -48,6 +48,12 @@ func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId str
 	if spaceType == SpaceTypeFamily {
 		fileInfo["familyId"] = familyId
 	}
+	if spaceType == SpaceTypeSecret {
+		if w.psToken == "" {
+			return "", ErrPsToken
+		}
+		fileInfo["psToken"] = w.psToken
+	}
 	fileInfoStr, err := w.EncryptParam(ChannelWoHome, fileInfo)
 	if err != nil {
 		return "", err

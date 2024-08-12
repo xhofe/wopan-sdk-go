@@ -31,6 +31,12 @@ func (w *WoClient) QueryAllFiles(spaceType, parentDirectoryId string, pageNum, p
 	if spaceType == SpaceTypeFamily {
 		param["familyId"] = familyId
 	}
+	if spaceType == SpaceTypeSecret {
+		if w.psToken == "" {
+			return nil, ErrPsToken
+		}
+		param["psToken"] = w.psToken
+	}
 	_, err := w.RequestWoHome(KeyQueryAllFiles, param, JsonSecret, &resp, opts...)
 	if err != nil {
 		return nil, err
@@ -101,6 +107,12 @@ func (w *WoClient) CreateDirectory(spaceType, parentDirectoryId string, director
 		"parentDirectoryId": parentDirectoryId,
 		"directoryName":     directoryName,
 		"clientId":          DefaultClientID,
+	}
+	if spaceType == SpaceTypeSecret {
+		if w.psToken == "" {
+			return nil, ErrPsToken
+		}
+		param["psToken"] = w.psToken
 	}
 	_, err := w.RequestWoHome(KeyCreateDirectory, param, JsonSecret, &resp, opts...)
 	if err != nil {
