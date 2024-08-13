@@ -15,7 +15,7 @@ type File struct {
 }
 
 type QueryAllFilesData struct {
-	Files []File `json:"files"`
+	Files []*File `json:"files"`
 }
 
 func (w *WoClient) QueryAllFiles(spaceType, parentDirectoryId string, pageNum, pageSize int, sortRule int, familyId string, opts ...RestyOption) (*QueryAllFilesData, error) {

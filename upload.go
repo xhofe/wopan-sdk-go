@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"math/rand"
 	"strconv"
 	"time"
 )
@@ -64,7 +65,7 @@ func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId str
 		totalPart = 1
 	}
 	formData := map[string]string{
-		"uniqueId":    strconv.FormatInt(time.Now().UnixMilli(), 10),
+		"uniqueId":    strconv.FormatInt(time.Now().UnixMilli(), 10) + "_" + randomChars(6),
 		"accessToken": w.accessToken,
 		"fileName":    file.Name,
 		"psToken":     "undefined",
@@ -135,4 +136,13 @@ func (w *WoClient) Upload2CPersonal(file Upload2CFile, targetDirId string, opt U
 
 func (w *WoClient) Upload2CFamily(file Upload2CFile, targetDirId string, familyId string, opt Upload2COption) (string, error) {
 	return w.Upload2C(SpaceTypeFamily, file, targetDirId, familyId, opt)
+}
+
+func randomChars(length int) string {
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	result := make([]byte, length)
+	for i := range result {
+		result[i] = charset[rand.Intn(len(charset))]
+	}
+	return string(result)
 }
