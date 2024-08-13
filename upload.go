@@ -49,7 +49,7 @@ func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId str
 	if spaceType == SpaceTypeFamily {
 		fileInfo["familyId"] = familyId
 	}
-	if spaceType == SpaceTypeSecret {
+	if spaceType == SpaceTypePrivate {
 		if w.psToken == "" {
 			return "", ErrPsToken
 		}

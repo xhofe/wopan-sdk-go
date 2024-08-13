@@ -31,7 +31,7 @@ func (w *WoClient) QueryAllFiles(spaceType, parentDirectoryId string, pageNum, p
 	if spaceType == SpaceTypeFamily {
 		param["familyId"] = familyId
 	}
-	if spaceType == SpaceTypeSecret {
+	if spaceType == SpaceTypePrivate {
 		if w.psToken == "" {
 			return nil, ErrPsToken
 		}
@@ -108,7 +108,7 @@ func (w *WoClient) CreateDirectory(spaceType, parentDirectoryId string, director
 		"directoryName":     directoryName,
 		"clientId":          DefaultClientID,
 	}
-	if spaceType == SpaceTypeSecret {
+	if spaceType == SpaceTypePrivate {
 		if w.psToken == "" {
 			return nil, ErrPsToken
 		}
