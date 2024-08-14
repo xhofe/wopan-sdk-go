@@ -24,6 +24,7 @@ const (
 const (
 	SpaceTypePersonal = "0"
 	SpaceTypeFamily   = "1"
+	SpaceTypePrivate  = "4"
 )
 
 // api-user methods
