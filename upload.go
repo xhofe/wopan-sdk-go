@@ -51,7 +51,7 @@ func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId str
 	}
 	if spaceType == SpaceTypePrivate {
 		if w.psToken == "" {
-			return "", ErrPsToken
+			return "", ErrInvalidPsToken
 		}
 		fileInfo["psToken"] = w.psToken
 	}
