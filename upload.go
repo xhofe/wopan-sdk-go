@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"math/rand"
+	"os"
 	"strconv"
 	"time"
 )
@@ -12,12 +13,13 @@ import (
 type Upload2COption struct {
 	OnProgress func(current, total int64)
 	Ctx        context.Context
+	RetryTimes int
 }
 
 type Upload2CFile struct {
 	Name        string
 	Size        int64
-	Content     io.Reader
+	Content     *os.File
 	ContentType string
 }
 
@@ -95,7 +97,7 @@ func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId str
 		}
 		formData["partSize"] = strconv.FormatInt(partSize, 10)
 		formData["partIndex"] = strconv.FormatInt(partIndex, 10)
-
+	Retry:
 		req := w.NewRequest().
 			SetResult(&resp).
 			ForceContentType("application/json;charset=UTF-8").
@@ -110,6 +112,14 @@ func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId str
 			req.SetContext(opt.Ctx)
 		}
 		res, err := req.Post(uploadURL)
+		if opt.RetryTimes > 0 && (err == nil || res.IsError() || resp.Code != "0000") {
+			opt.RetryTimes--
+			_, err = file.Content.Seek(finishedSize, io.SeekStart)
+			if err != nil {
+				return "", err
+			}
+			goto Retry
+		}
 		if err != nil {
 			return "", err
 		}
