@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log"
 	"math/rand"
 	"os"
 	"strconv"
@@ -97,37 +98,22 @@ func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId str
 		}
 		formData["partSize"] = strconv.FormatInt(partSize, 10)
 		formData["partIndex"] = strconv.FormatInt(partIndex, 10)
-	Retry:
-		req := w.NewRequest().
-			SetResult(&resp).
-			ForceContentType("application/json;charset=UTF-8").
-			SetHeaders(map[string]string{
-				"Origin":     "https://pan.wo.cn",
-				"Referer":    "https://pan.wo.cn/",
-				"User-Agent": w.ua,
-			}).
-			SetMultipartFormData(formData).
-			SetMultipartField("file", file.Name, file.ContentType, io.LimitReader(file.Content, partSize))
-		if opt.Ctx != nil {
-			req.SetContext(opt.Ctx)
-		}
-		res, err := req.Post(uploadURL)
-		if opt.RetryTimes > 0 && (err == nil || res.IsError() || resp.Code != "0000") {
-			opt.RetryTimes--
-			_, err = file.Content.Seek(finishedSize, io.SeekStart)
+		err := w.uploadPart(opt.Ctx, uploadURL, file, formData, partIndex, partSize, &resp)
+		if err != nil {
+			for i := 0; i < opt.RetryTimes; i++ {
+				_, serr := file.Content.Seek(finishedSize, 0)
+				if serr != nil {
+					return "", serr
+				}
+				err = w.uploadPart(opt.Ctx, uploadURL, file, formData, partIndex, partSize, &resp)
+				if err == nil {
+					break
+				}
+				log.Printf("retry upload partIndex: %d, err: %v\n", partIndex, err)
+			}
 			if err != nil {
 				return "", err
 			}
-			goto Retry
-		}
-		if err != nil {
-			return "", err
-		}
-		if res.IsError() {
-			return "", fmt.Errorf("partIndex: %d, failed to upload2C with http status: %d, body: %s", partIndex, res.StatusCode(), res.String())
-		}
-		if resp.Code != "0000" {
-			return "", fmt.Errorf("partIndex: %d, failed to upload2C with code: %s, msg: %s", partIndex, resp.Code, resp.Msg)
 		}
 		if resp.Data.Fid != "" {
 			fid = resp.Data.Fid
@@ -138,6 +124,34 @@ func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId str
 		}
 	}
 	return fid, nil
+}
+
+func (w *WoClient) uploadPart(ctx context.Context, uploadURL string, file Upload2CFile, formData map[string]string, partIndex int64, partSize int64, resp *Upload2CResp) error {
+	req := w.NewRequest().
+		SetResult(resp).
+		ForceContentType("application/json;charset=UTF-8").
+		SetHeaders(map[string]string{
+			"Origin":     "https://pan.wo.cn",
+			"Referer":    "https://pan.wo.cn/",
+			"User-Agent": w.ua,
+		}).
+		SetMultipartFormData(formData).
+		SetMultipartField("file", file.Name, file.ContentType, io.LimitReader(file.Content, partSize))
+	if ctx != nil {
+		req.SetContext(ctx)
+	}
+	res, err := req.Post(uploadURL)
+
+	if err != nil {
+		return err
+	}
+	if res.IsError() {
+		return fmt.Errorf("partIndex: %d, failed to upload2C with http status: %d, body: %s", partIndex, res.StatusCode(), res.String())
+	}
+	if resp.Code != "0000" {
+		return fmt.Errorf("partIndex: %d, failed to upload2C with code: %s, msg: %s", partIndex, resp.Code, resp.Msg)
+	}
+	return nil
 }
 
 func (w *WoClient) Upload2CPersonal(file Upload2CFile, targetDirId string, opt Upload2COption) (string, error) {
