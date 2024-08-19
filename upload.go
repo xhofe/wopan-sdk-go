@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"math/rand"
 	"os"
 	"strconv"
@@ -15,6 +14,7 @@ type Upload2COption struct {
 	OnProgress func(current, total int64)
 	Ctx        context.Context
 	RetryTimes int
+	OnRetry    func(err error, fileName string, partIndex int64, finishedSize int64)
 }
 
 type Upload2CFile struct {
@@ -101,6 +101,9 @@ func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId str
 		err := w.uploadPart(opt.Ctx, uploadURL, file, formData, partIndex, partSize, &resp)
 		if err != nil {
 			for i := 0; i < opt.RetryTimes; i++ {
+				if opt.OnRetry != nil {
+					opt.OnRetry(err, file.Name, partIndex, finishedSize)
+				}
 				_, serr := file.Content.Seek(finishedSize, 0)
 				if serr != nil {
 					return "", serr
@@ -109,7 +112,6 @@ func (w *WoClient) Upload2C(spaceType string, file Upload2CFile, targetDirId str
 				if err == nil {
 					break
 				}
-				log.Printf("retry upload partIndex: %d, err: %v\n", partIndex, err)
 			}
 			if err != nil {
 				return "", err
