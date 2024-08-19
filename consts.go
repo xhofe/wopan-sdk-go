@@ -56,6 +56,7 @@ const (
 	KeyDeleteFile              = "DeleteFile"
 	KeyEmptyRecycleData        = "EmptyRecycleData"
 	KeyUpload2C                = "upload2C"
+	KeyPrivateSpaceLogin       = "PrivateSpaceLogin"
 )
 
 const (

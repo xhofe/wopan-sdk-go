@@ -181,3 +181,22 @@ func (w *WoClient) FamilyUserCurrentEncode(opts ...RestyOption) (*FamilyUserCurr
 	}
 	return &resp, nil
 }
+
+type PrivateSpaceLoginData struct {
+	PsToken string `json:"psToken"`
+	IsPass  string `json:"isPass"`
+	Desc    string `json:"desc"`
+}
+
+func (w *WoClient) PrivateSpaceLogin(pwd string, opts ...RestyOption) error {
+	var resp PrivateSpaceLoginData
+	_, err := w.RequestWoHome(KeyPrivateSpaceLogin, Json{
+		"pwd":      pwd,
+		"clientId": DefaultClientID,
+	}, JsonSecret, &resp, opts...)
+	if err != nil {
+		return err
+	}
+	w.SetPsToken(resp.PsToken)
+	return nil
+}
