@@ -139,6 +139,12 @@ func (w *WoClient) RenameFileOrDirectory(spaceType string, _type int, id string,
 	if spaceType == SpaceTypeFamily {
 		param["familyId"] = familyId
 	}
+	if spaceType == SpaceTypePrivate {
+		if w.psToken == "" {
+			return ErrInvalidPsToken
+		}
+		param["psToken"] = w.psToken
+	}
 	_, err := w.RequestWoHome(KeyRenameFileOrDirectory, param, JsonSecret, nil, opts...)
 	return err
 }
