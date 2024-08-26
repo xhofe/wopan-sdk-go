@@ -33,7 +33,7 @@ func (w *WoClient) QueryAllFiles(spaceType, parentDirectoryId string, pageNum, p
 	}
 	if spaceType == SpaceTypePrivate {
 		if w.psToken == "" {
-			return nil, ErrPsToken
+			return nil, ErrInvalidPsToken
 		}
 		param["psToken"] = w.psToken
 	}
@@ -110,7 +110,7 @@ func (w *WoClient) CreateDirectory(spaceType, parentDirectoryId string, director
 	}
 	if spaceType == SpaceTypePrivate {
 		if w.psToken == "" {
-			return nil, ErrPsToken
+			return nil, ErrInvalidPsToken
 		}
 		param["psToken"] = w.psToken
 	}
@@ -138,6 +138,12 @@ func (w *WoClient) RenameFileOrDirectory(spaceType string, _type int, id string,
 	}
 	if spaceType == SpaceTypeFamily {
 		param["familyId"] = familyId
+	}
+	if spaceType == SpaceTypePrivate {
+		if w.psToken == "" {
+			return ErrInvalidPsToken
+		}
+		param["psToken"] = w.psToken
 	}
 	_, err := w.RequestWoHome(KeyRenameFileOrDirectory, param, JsonSecret, nil, opts...)
 	return err

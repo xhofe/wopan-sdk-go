@@ -39,7 +39,7 @@ func (w *WoClient) request(channel string, key string, param, other Json, resp i
 		return res.Body(), fmt.Errorf("request failed with status: %s, msg: %s", _resp.Status, _resp.Msg)
 	}
 	if _resp.Rsp.RspCode != "0000" {
-		if channel != ChannelAPIUser && retry /*&& _resp.Rsp.RspCode == "9999"*/ {
+		if channel != ChannelAPIUser && retry && _resp.Rsp.RspCode == "9999" {
 			err := w.RefreshToken()
 			if err != nil {
 				return res.Body(), err
