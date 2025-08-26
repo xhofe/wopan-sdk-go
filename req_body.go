@@ -15,6 +15,19 @@ func (w *WoClient) EncryptParam(channel string, param Json) (string, error) {
 	return encrypted, nil
 }
 
+func (w *WoClient) Decrypt(content string, channel string) (Json, error) {
+	decrypted, err := w.crypto.Decrypt(content, channel)
+	if err != nil {
+		return nil, err
+	}
+	param := Json{}
+	err = w.jsonUnmarshalFunc([]byte(decrypted), &param)
+	if err != nil {
+		return nil, err
+	}
+	return param, nil
+}
+
 func (w *WoClient) NewBody(channel string, param, other Json) (Json, error) {
 	if param == nil {
 		return other, nil

@@ -49,6 +49,7 @@ const (
 	KeyGetSearchDirectory      = "GetSearchDirectory"
 	KeyGetDownloadUrlV2        = "GetDownloadUrlV2"
 	KeyGetDownloadUrl          = "GetDownloadUrl"
+	KeyGetDownloadUrlV3        = "GetDownloadUrlV3"
 	KeyCreateDirectory         = "CreateDirectory"
 	KeyRenameFileOrDirectory   = "RenameFileOrDirectory"
 	KeyMoveFile                = "MoveFile"
